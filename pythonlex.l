@@ -44,8 +44,24 @@ EXPONENCIAL         {DIGITPART}{EXPONENTE}
 
 DECIMAL     ({DECIMAL_CON_PUNTO}|{DECIMAL_SIN_PUNTO}|{EXPONENCIAL})
 
+/*Imaginarios*/
+IMAGINARIO  ({ENTERO|DECIMAL})j
 
+/*COMENTARIOS*/
 
+COMENTARIO  #[^\n]*
+
+/*OPERADORES*/
+
+OPERADOR (\+|\-|\*|\*\*|\/|\/\/|\%|\@|\<\<|\>\>|\&|\||\^|\~|\:\=|\<|\>|\<\=|\>\=|\=\=|\!\=|\)|\(|\[|\]|\{|\}|\,|\;|\:|\.|\=|\-\>|\+\=|\-\=|\*\=|\/\=|\/\/\=|\%\=|\@\=|\&\=|\|\=|\^\=|\>\>\=|\<\<\=|\*\*\=)
+
+/*STRINGS*/
+
+STRING_SIMPLE   (\'(.|\n)+\')|(\"(.|\n)+\")
+STRING_LARGO    \"\"\"(.|\n)+\"\"\"
+
+/*SALTABLES*/
+IGNORAR     [ \t\n]
 
 % /*Parte de las reglas*/
 
