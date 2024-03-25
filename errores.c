@@ -15,6 +15,9 @@ void imprimirError(int codigo) {
         case COMENTARIO_MULTILINEA_NO_CERRADO:
             fprintf(stderr, "\nError: comentario multilinea no cerrado.\n\n");
             break;
+        case COMP_NO_VALIDO:
+            fprintf(stderr, "\nError: comentario multilinea no cerrado.\n\n");
+            break;
      
     }
 }

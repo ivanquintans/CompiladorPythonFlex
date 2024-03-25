@@ -25,6 +25,11 @@ HEXPART     {HEXADECIMAL}(\_?{HEXADECIMAL})*
 
 /*Tokens para los numeros*/
 
+
+/*IDENTIFICADORES*/
+
+IDENTIFICADOR ({LETRA|\_})({LETRA|DIGITPART}|\_)*
+
 /*Integers*/
 
 NUMERO_DECINTEGER   {DIGITO}(\_?{DIGITPART})?
@@ -44,6 +49,8 @@ EXPONENCIAL         {DIGITPART}{EXPONENTE}
 
 DECIMAL     ({DECIMAL_CON_PUNTO}|{DECIMAL_SIN_PUNTO}|{EXPONENCIAL})
 
+NUMERO  ({ENTERO|IMAGINARIO|DECIMAL})
+
 /*Imaginarios*/
 IMAGINARIO  ({ENTERO|DECIMAL})j
 
@@ -53,17 +60,99 @@ COMENTARIO  #[^\n]*
 
 /*OPERADORES*/
 
-OPERADOR (\+|\-|\*|\*\*|\/|\/\/|\%|\@|\<\<|\>\>|\&|\||\^|\~|\:\=|\<|\>|\<\=|\>\=|\=\=|\!\=|\)|\(|\[|\]|\{|\}|\,|\;|\:|\.|\=|\-\>|\+\=|\-\=|\*\=|\/\=|\/\/\=|\%\=|\@\=|\&\=|\|\=|\^\=|\>\>\=|\<\<\=|\*\*\=)
+MENORMENOR          \<\<
+MAYORMAYOR          \>\>      
+DOUSPUNTOSIGUAL     \:\=   
+MAYORIGUAL          \>\=
+MENORIGUAL          \<\=
+IGUALIGUAL          \=\=
+DISTINTO            \!\=
+ASTERICOASTERISCO   \*\*     
+BARRABARRA          \/\/     
+GUIONFLECHA         \-\>
+MASIGUAL            \+\=
+MENOSIGUAL          \-\=
+ASTERISCOIGUAL      \*\=     
+BARRAIGUAL          \/\=
+BARRABARRAIGUAL     \/\/\=
+PORCIENTOIGUAL      \%\=
+ARROBAIGUAL         \@\=
+UNPERSANTIGUAL      \&\=
+BARRAVERTICALIGUAL  \|\=
+EXPONENCIALIGUAL    \^\=
+MAYORMAYORIGUAL     \>\>\=
+MENORMENORIGUAL     \<\<\=
+ASTERISCOASTERISCOIGUAL \*\*\=
 
+OPERADOR_ASCII  (\+|\-|\*|\/\\%|\@|\&|\||\^|\~|\:\=|\<|\>|\)|\(|\[|\]|\{|\}|\,|\;|\:|\.|\=)
 /*STRINGS*/
 
 STRING_SIMPLE   (\'(.|\n)+\')|(\"(.|\n)+\")
 STRING_LARGO    \"\"\"(.|\n)+\"\"\"
 
+STRING      {STRING_SIMPLE}|{STRING_LARGO}
+
 /*SALTABLES*/
 IGNORAR     [ \t\n]
 
-% /*Parte de las reglas*/
+%% /*Parte de las reglas*/
+
+/*Si tenemos alguno de los tokens que queremos los devolvemos*/
+{IDENTIFICADOR}     {return IDENTIFICADOR;}
+{STRING}            {return STRING;}
+{OPERADOR}          {return OPERADOR;}
+{NUMERO}            {return NUMERO;}
+/*Si se detecta cualquier otro caracter que no sea el que queremos devolvemos error*/
+.                   {return -1;}
+<<EOF>>             {yyterminate();}
+
+%%
+
+void openFile(char *nombreArchivo){
+    FILE *miArchivo;
+    miArchivo = fopen(nombreArchivo,"r");
+    if (miArchivo == NULL) error(ERROR_ABRIR_ARCHIVO);
+    yyin = miArchivo;
+}
+
+void close(){
+    fclose(yyin);
+    yylex_destroy();
+}
+
+
+void sigCompLexico (TIPOELEMENTO *comp){
+    /*Vamos a elimianr el lexico.c y implementarlo directamente desde aqui*/
+    comp->codigo == yylex();
+
+    /*Si el codifo es -1 es que encontramos un error*/
+
+    if (comp->codigo == -1){
+        //no reconocimos componente
+        error(COMP_NO_VALIDO);
+
+    /*Ahora en caso de que sea valido el codigo colocamos en comp->lexema el valor obtenido*/
+    }else if(comp->codigo != 0){
+        comp->lexema = strdup(yytext); //valor que asociamos al componente
+
+    }
+
+    /*Ahora controlamos el tipo que es ya que si es ID hay que añadir a la tabla de simbolos, si es un operador simple hay que imprimir el ascii y en caso de ser 0 es el final del archivo */
+
+    if (comp->codifo == ID){
+        //buscamos el elemento en la tabla de simbolos y si no lo insertamos
+        insertarTablaSimbolos(&comp);
+
+    }else if (comp->codigo == OPERADOR_ASCII){
+        comp->codifo = comp->lexema;
+    }else if (comp->codifo == 0){
+        //cuando se llama a yyterminate, se devuelve 0
+        comp->codigo = EOF;
+    }
+}
+
+
+
 
 
 
