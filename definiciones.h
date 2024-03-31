@@ -1,6 +1,11 @@
 #ifndef DEFINICIONES_H
 #define DEFINICIONES_H
 
+typedef struct {
+    int codigo;
+    char *lexema;
+}compLexico;
+
 
 #define ID 300 //identificadores
 
@@ -44,11 +49,11 @@
 
 #define MENORMENOR  336    // <<
 #define MAYORMAYOR  337    // >>
-#define DOUSPUNTOSIGUAL 338     // :=
+#define DOSPUNTOSIGUAL 338     // :=
 #define MAYORIGUAL 339      //>=
 #define MENORIGUAL 340     //<=
 #define IGUALIGUAL 341     //==
-#define DISTINTO 342    //!=
+#define DISTINTO 342    
 #define ASTERICOASTERISCO 343     //**
 #define BARRABARRA 344    // 
 #define GUIONFLECHA 345    //->
@@ -68,9 +73,11 @@
 
 #define STRING 370
 
-
-#define NUMERO 370
+#define OPERADOR_ASCII 390
+#define NUMERO 380
 #define ERROR 1000
+
+
 
 
 

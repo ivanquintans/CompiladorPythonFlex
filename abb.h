@@ -1,6 +1,6 @@
 #ifndef ABB_H
 #define ABB_H
-#include "lexico.h"
+#include "definiciones.h"
 
 /**
  * Tipo de dato abstracto para arbol binario con clave de

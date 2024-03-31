@@ -2,7 +2,6 @@
 #define TABLASIMBOLOS_H
 
 #include "definiciones.h"
-#include "lexico.h"
 
 // funcion que inicializa la tabla de simbolos
 void inicializarTablaSimbolos();
